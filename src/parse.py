@@ -74,8 +74,8 @@ def parse_menu_page(page: JSONBlockOutput) -> dict | None:
     for row in dishes.find_all("tr"):
         cells = row.find_all(["td", "th"])
         if len(cells) == 2:
-            category = replace_br_tags(cells[0]).get_text()
-            dish = replace_br_tags(cells[1]).get_text()
+            category = replace_br_tags(cells[0]).get_text().replace(",", ", ")
+            dish = replace_br_tags(cells[1]).get_text().replace(",", ", ")
             if category and dish:
                 menu["dishes"].append({"category": category, "dish": dish})
 
