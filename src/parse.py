@@ -50,11 +50,11 @@ def parse_menu_page(page: JSONBlockOutput) -> dict | None:
 
     # Find the weekday in the title
     weekday_soup = BeautifulSoup(page.children[0].html, "html.parser")
-    weekday = weekday_soup.find("h1")
-    if weekday is None or not any(weekday.get_text().lower() == d for d in WEEKDAYS):
+    weekday = weekday_soup.get_text()
+    if not any(weekday.lower() == d for d in WEEKDAYS):
         return None
 
-    menu["weekday"] = weekday.get_text()
+    menu["weekday"] = weekday
 
     # Find the date
     date_soup = BeautifulSoup(page.children[1].html, "html.parser")
@@ -76,7 +76,8 @@ def parse_menu_page(page: JSONBlockOutput) -> dict | None:
         if len(cells) == 2:
             category = replace_br_tags(cells[0]).get_text()
             dish = replace_br_tags(cells[1]).get_text()
-            menu["dishes"].append({"category": category, "dish": dish})
+            if category and dish:
+                menu["dishes"].append({"category": category, "dish": dish})
 
     return menu
 

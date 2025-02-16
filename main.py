@@ -2,6 +2,7 @@ import os
 import json
 import argparse
 import logging
+import datetime
 
 from src.download import download
 from src.parse import parse_menu_pdf
@@ -10,12 +11,14 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
 logger = logging.getLogger(__name__)
 
 def main():
+	(year, week, _) = datetime.datetime.now().isocalendar()
+
 	parser = argparse.ArgumentParser(description='Download the menu for a given year and week')
 
-	parser.add_argument('--year', type=int, help='The year of the menu')
-	parser.add_argument('--week', type=int, help='The week of the menu')
-	parser.add_argument('--output-dir', default='menus', help='The directory to save the menu PDFs')
-	parser.add_argument('--output-file', default='menu_{year}_{week}.json', help='The file to save the parsed menu to')
+	parser.add_argument('--year', type=int, default=year, help='The year of the menu')
+	parser.add_argument('--week', type=int, default=week, help='The week of the menu')
+	parser.add_argument('--output-dir', type=str, default='menus', help='The directory to save the menu PDFs')
+	parser.add_argument('--output-file', type=str, default='menu_{year}_{week}.json', help='The file to save the parsed menu to')
 
 	args = parser.parse_args()
 
